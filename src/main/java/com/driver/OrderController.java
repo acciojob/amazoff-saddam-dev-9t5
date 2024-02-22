@@ -38,7 +38,7 @@ public class OrderController {
     public ResponseEntity<String> addOrderPartnerPair(@RequestParam String orderId, @RequestParam String partnerId){
 
         //This is basically assigning that order to that partnerId
-        String response = deliveryPartnerService.addOrderPartnerPair(orderId, partnerId);
+        String response = orderService.addOrderPartnerPair(orderId, partnerId);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 

@@ -7,12 +7,10 @@ import java.util.List;
 @Service
 public class DeliveryPartnerService {
     DeliveryPartnerRepository deliveryPartnerRepository = new DeliveryPartnerRepository();
+
+    OrderRepository orderRepository = new OrderRepository();
     public String addPartner(String partnerId) {
         return deliveryPartnerRepository.addPartner(partnerId);
-    }
-
-    public String addOrderPartnerPair(String orderId, String partnerId) {
-        return deliveryPartnerRepository.addOrderPartnerPair(orderId, partnerId);
     }
 
     public DeliveryPartner getPartnerById(String partnerId) {
@@ -28,6 +26,10 @@ public class DeliveryPartnerService {
     }
 
     public String deletePartnerById(String partnerId) {
+        List<String> orderList = deliveryPartnerRepository.getOrdersByPartnerId(partnerId);
+        for (String orderId: orderList) {
+            orderRepository.unsetPartnerIdByOrderId(orderId);
+        }
         return deliveryPartnerRepository.deletePartnerById(partnerId);
     }
 }

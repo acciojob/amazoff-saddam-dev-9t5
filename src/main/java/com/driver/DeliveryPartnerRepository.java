@@ -15,28 +15,27 @@ public class DeliveryPartnerRepository {
     }
 
     public String addOrderPartnerPair(String orderId, String partnerId) {
-        List<String> orderList = new ArrayList<>();
-        if(this.orderPartnerPair.containsKey(partnerId)) {
-            orderList = this.orderPartnerPair.get(partnerId);
-            orderList.remove(orderId);
+        if(deliveryPartners.containsKey(partnerId)) {
+            DeliveryPartner deliveryPartner = deliveryPartners.get(partnerId);
+            deliveryPartner.getOrderIdList().add(orderId);
         }
-        orderList.add(orderId);
-        this.orderPartnerPair.put(partnerId, orderList);
-        DeliveryPartner deliveryPartner = this.deliveryPartners.get(partnerId);
-        deliveryPartner.setNumberOfOrders(orderList.size());
         return "New order-partner pair added successfully";
     }
 
     public DeliveryPartner getPartnerById(String partnerId) {
-        return this.deliveryPartners.get(partnerId);
+        DeliveryPartner deliveryPartner = new DeliveryPartner();
+        if(deliveryPartners.containsKey(partnerId)) {
+            deliveryPartner = deliveryPartners.get(partnerId);
+        }
+        return deliveryPartner;
     }
 
     public int getOrderCountByPartnerId(String partnerId) {
-        return this.deliveryPartners.get(partnerId).getNumberOfOrders();
+        return deliveryPartners.get(partnerId).getOrderIdList().size();
     }
 
     public List<String> getOrdersByPartnerId(String partnerId) {
-        return this.orderPartnerPair.get(partnerId);
+        return deliveryPartners.get(partnerId).getOrderIdList();
     }
 
     public List<String> getAllAssignedOrder() {
@@ -48,8 +47,7 @@ public class DeliveryPartnerRepository {
     }
 
     public String deletePartnerById(String partnerId) {
-        this.deliveryPartners.remove(partnerId);
-        this.orderPartnerPair.remove(partnerId);
+        deliveryPartners.remove(partnerId);
         return partnerId + " removed successfully";
     }
 
@@ -61,6 +59,12 @@ public class DeliveryPartnerRepository {
                     return;
                 }
             }
+        }
+    }
+
+    public void unsetOrderIdFromPartnerId(String orderId, String deliveryPartnerId) {
+        if(deliveryPartners.containsKey(deliveryPartnerId)) {
+            deliveryPartners.get(deliveryPartnerId).getOrderIdList().remove(orderId);
         }
     }
 }

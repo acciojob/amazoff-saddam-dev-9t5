@@ -2,11 +2,14 @@ package com.driver;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class Order {
 
     private String id;
     private int deliveryTime;
+
+    private String deliveryPartnerId;
 
     public Order() {
 
@@ -24,4 +27,21 @@ public class Order {
     }
 
     public int getDeliveryTime() {return deliveryTime;}
+
+    public String getDeliveryPartnerId() {
+        return deliveryPartnerId;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setDeliveryTime(int deliveryTime) {
+        this.deliveryTime = deliveryTime;
+    }
+
+    public void setDeliveryPartnerId(String deliveryPartnerId) {
+        this.deliveryPartnerId = deliveryPartnerId;
+    }
+
 }

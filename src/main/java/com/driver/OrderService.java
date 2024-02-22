@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -13,6 +12,13 @@ public class OrderService {
     DeliveryPartnerRepository deliveryPartnerRepository = new DeliveryPartnerRepository();
     public String addOrder(Order order) {
         return orderRepository.addOrder(order);
+    }
+
+    public String addOrderPartnerPair(String orderId, String partnerId) {
+        if(orderRepository.addOrderPartnerPair(orderId, partnerId)) {
+            return deliveryPartnerRepository.addOrderPartnerPair(orderId, partnerId);
+        }
+        return "Invalid input";
     }
 
     public List<String> getAllOrders() {
@@ -24,10 +30,8 @@ public class OrderService {
     }
 
     public int getCountOfUnassignedOrders() {
-        List<String> allOrder = orderRepository.getAllOrders();
-        List<String> assignedOrder = deliveryPartnerRepository.getAllAssignedOrder();
-        allOrder.removeAll(assignedOrder);
-        return allOrder.size();
+        List<String> unassignedOrders = orderRepository.getCountOfUnassignedOrders();
+        return unassignedOrders.size();
     }
 
     public int getOrdersLeftAfterGivenTimeByPartnerId(String time, String partnerId) {
@@ -60,7 +64,10 @@ public class OrderService {
     }
 
     public String deleteOrderById(String orderId) {
-        deliveryPartnerRepository.deleteOrderById(orderId);
+        Order order = orderRepository.getOrderById(orderId);
+        if(!order.getDeliveryPartnerId().isEmpty()) {
+            deliveryPartnerRepository.unsetOrderIdFromPartnerId(orderId, order.getDeliveryPartnerId());
+        }
         return orderRepository.deleteOrderById(orderId);
     }
 }
