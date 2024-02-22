@@ -23,7 +23,7 @@ public class OrderRepository {
     }
 
     public boolean addOrderPartnerPair(String orderId, String partnerId) {
-        if(orders.containsKey(orderId)) {
+        if(!orders.isEmpty() && orders.containsKey(orderId)) {
             Order order = orders.get(orderId);
             if(order.getDeliveryPartnerId().isEmpty()) {
                 order.setDeliveryPartnerId(partnerId);

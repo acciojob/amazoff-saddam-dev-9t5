@@ -15,8 +15,8 @@ public class OrderService {
     }
 
     public String addOrderPartnerPair(String orderId, String partnerId) {
-        if(orderRepository.addOrderPartnerPair(orderId, partnerId)) {
-            return deliveryPartnerRepository.addOrderPartnerPair(orderId, partnerId);
+        if(orderRepository.addOrderPartnerPair(orderId, partnerId) && deliveryPartnerRepository.addOrderPartnerPair(orderId, partnerId)) {
+            return "New order-partner pair added successfully";
         }
         return "Invalid input";
     }

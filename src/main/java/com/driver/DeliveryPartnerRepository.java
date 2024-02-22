@@ -14,12 +14,17 @@ public class DeliveryPartnerRepository {
         return "New delivery partner added successfully";
     }
 
-    public String addOrderPartnerPair(String orderId, String partnerId) {
-        if(deliveryPartners.containsKey(partnerId)) {
+    public boolean addOrderPartnerPair(String orderId, String partnerId) {
+        if(!deliveryPartners.isEmpty() && deliveryPartners.containsKey(partnerId)) {
             DeliveryPartner deliveryPartner = deliveryPartners.get(partnerId);
-            deliveryPartner.getOrderIdList().add(orderId);
+            if(deliveryPartner.getOrderIdList().isEmpty()) {
+                deliveryPartner.getOrderIdList().add(orderId);
+            }else if(!deliveryPartner.getOrderIdList().contains(orderId)) {
+                deliveryPartner.getOrderIdList().add(orderId);
+            }
+            return true;
         }
-        return "New order-partner pair added successfully";
+        return false;
     }
 
     public DeliveryPartner getPartnerById(String partnerId) {
